@@ -49,6 +49,12 @@ def main():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
+
+        if kk_rct.colliderect(bb_rct):  # kkとbbのrectが重なっていたら
+            print("game over")
+            return
+
+
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
         # if key_lst[pg.K_UP]:
@@ -67,7 +73,7 @@ def main():
         kk_rct.move_ip(sum_mv)
         
         if check_bound(kk_rct) != (True,True):
-            kk_rct.move_ip(-sum_mv[0],-sum[1])
+            kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
 
         screen.blit(kk_img, kk_rct)
         bb_rct.move_ip(vx,vy)
