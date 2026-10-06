@@ -2,6 +2,7 @@ import os
 import sys
 import pygame as pg
 import random
+import time
 
 WIDTH, HEIGHT = 1100, 650
 DELTA = {
@@ -25,6 +26,37 @@ def check_bound(rect: pg.Rect) -> tuple[bool,bool]:
         tate = False  # 縦方向判定
     return yoko,tate 
 
+def gameover(screen: pg.Surface) -> None:
+    go_img = pg.Surface((WIDTH,HEIGHT))
+    a = pg.Rect(0,0,WIDTH,HEIGHT)
+    pg.draw.rect(go_img,(0,0,0),a)
+    go_img.set_alpha(220)
+    fonto = pg.font.Font(None,80)
+    txt = fonto.render("Game Over",True,(255,255,255))
+    
+    ko_img = pg.image.load("fig/8.png")
+    k_rctr = ko_img.get_rect()
+    k_rctr.center = 300,335
+    k_rctl = ko_img.get_rect()
+    k_rctl.center = 800,335
+    go_img.blit(txt,[400,300])
+    go_img.blit(ko_img,k_rctr)
+    go_img.blit(ko_img,k_rctl)
+    screen.blit(go_img,[0,0])
+
+
+# def init_bb_imags() -> tuple[list[pg.Surface], list[int]]:
+#     bb_imgs = []
+#     bb_accs = [a for a in range(1,11)]
+#     for r in range(1, 11):
+#         bb_img = pg.Surface((20*r, 20*r))
+#         pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+#         bb_imgs.append(bb_img)
+#         bb_accs = [a for a in range(1, 11)]
+#     return bb_imgs,bb_accs
+
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -41,7 +73,7 @@ def main():
     vx,vy= +5,-5
     clock = pg.time.Clock()
     tmr = 0
-    
+    # bb_imgs,bb_accs = init_bb_imags()
     
 
     while True:
@@ -50,9 +82,18 @@ def main():
                 return
         screen.blit(bg_img, [0, 0]) 
 
-        if kk_rct.colliderect(bb_rct):  # kkとbbのrectが重なっていたら
-            print("game over")
+        # if kk_rct.colliderect(bb_rct):  # kkとbbのrectが重なっていたら
+        #     print("game over")
+        #     return
+
+        if kk_rct.colliderect(bb_rct):
+            gameover(screen)
+            pg.display.update()
+            time.sleep(5)
             return
+
+        
+
 
 
         key_lst = pg.key.get_pressed()
@@ -76,6 +117,14 @@ def main():
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
 
         screen.blit(kk_img, kk_rct)
+
+       
+        # avx = vx*bb_accs[min(tmr//500, 9)] 
+        # avy = vy*bb_accs[min(tmr//500, 9)] 
+        # bb_img = bb_imgs[min(tmr//500, 9)]
+        # bb_rct.width = bb_img.get_rect().width
+        # bb_rct.move_ip(avx,avy)
+
         bb_rct.move_ip(vx,vy)
         yoko,tate = check_bound(bb_rct)
         if not yoko:  # yoko == False
