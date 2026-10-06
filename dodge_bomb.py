@@ -27,22 +27,28 @@ def check_bound(rect: pg.Rect) -> tuple[bool,bool]:
     return yoko,tate 
 
 def gameover(screen: pg.Surface) -> None:
-    go_img = pg.Surface((WIDTH,HEIGHT))
+    """
+    ゲームオーバー時に発動する関数
+    引数：screen(Surface)
+    戻り値:なし
+    """
+    go_img = pg.Surface((WIDTH,HEIGHT))  # 空のSurfaceを作る
     a = pg.Rect(0,0,WIDTH,HEIGHT)
-    pg.draw.rect(go_img,(0,0,0),a)
-    go_img.set_alpha(220)
-    fonto = pg.font.Font(None,80)
-    txt = fonto.render("Game Over",True,(255,255,255))
+    pg.draw.rect(go_img,(0,0,0),a)  # 黒い矩形を描画する
+    go_img.set_alpha(220)  # 透明度を設定する
+    fonto = pg.font.Font(None,80)  # フォントサイズを80に設定する
+    txt = fonto.render("Game Over",True,(255,255,255))  # 白字で"Game over"と書かれたSurfaceインスタンスを生成する
     
-    ko_img = pg.image.load("fig/8.png")
-    k_rctr = ko_img.get_rect()
-    k_rctr.center = 300,335
-    k_rctl = ko_img.get_rect()
-    k_rctl.center = 800,335
-    go_img.blit(txt,[400,300])
-    go_img.blit(ko_img,k_rctr)
-    go_img.blit(ko_img,k_rctl)
-    screen.blit(go_img,[0,0])
+    ko_img = pg.image.load("fig/8.png")  # 泣いてるこうかとんを読み込む
+    k_rctr= ko_img.get_rect()  # こうかとんのrectを作る
+    k_rctr.center = 300,335  # こうかとんの位置をしていする
+    k_rctl = ko_img.get_rect()  # こうかとんのrectを作る
+    k_rctl.center = 800,335  # こうかとんの位置をしていする
+    go_img.blit(txt,[400,300])  # blitする
+    go_img.blit(ko_img,k_rctr)  # blitする
+    go_img.blit(ko_img,k_rctl)  # blitする
+    screen.blit(go_img,[0,0])  # blitする
+print(gameover.__doc__)
 
 
 # def init_bb_imags() -> tuple[list[pg.Surface], list[int]]:
